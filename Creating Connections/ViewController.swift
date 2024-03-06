@@ -39,21 +39,28 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel.text = "Creating Connections"
     }
     
-    // MARK: - PKCanvasViewDelegate
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            print("*\(touch.force)*")
+        }
+    }
     
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         let drawing = canvasView.drawing
         let lastStroke = drawing.strokes.last
         let path = lastStroke!.path
         
-        let start_coords : String = "\(path.first!.location)"
-        let end_coords : String = "\(path.last!.location)"
-        infoLabel.text = start_coords + " -> " + end_coords
+        let start_coords = path.first!.location
+        let end_coords = path.last!.location
+        let info = "\(start_coords) -> \(end_coords)"
         
-        print("START:")
-        print(start_coords)
-        print("END:")
-        print(end_coords)
-        print("---")
+        infoLabel.text = info
+        
+        print("~ " + info + " ~")
+        print("==============")
+        for point in path {
+            print(point.location)
+        }
+        print("--------------\n\n")
     }
 }
