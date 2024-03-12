@@ -10,8 +10,8 @@ import PencilKit
 
 class ViewController: UIViewController, PKCanvasViewDelegate {
     
-    private let canvasView: PKCanvasView = {
-        let canvas = PKCanvasView()
+    private let canvasView: CustomCanvasView = {
+        let canvas = CustomCanvasView()
         canvas.drawingPolicy = .anyInput
         return canvas
     }()
@@ -45,20 +45,6 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel.frame = CGRect(x: 0, y: 50, width: view.bounds.width, height: 50)
         infoLabel.text = "Creating Connections"
         
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            print("!\(touch.force)!")
-            infoLabel.text = "\(touch.force)"
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            print("*\(touch.force)*")
-            infoLabel.text = "\(touch.force)"
-        }
     }
     
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {

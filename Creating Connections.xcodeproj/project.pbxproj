@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B3C738A2BA02BE700B104EF /* CustomCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */; };
 		5B4B5BA82BA01BBC0051F939 /* archimedean_spiral.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */; };
 		5B981E552B96D74000F1FA60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E542B96D74000F1FA60 /* AppDelegate.swift */; };
 		5B981E572B96D74000F1FA60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E562B96D74000F1FA60 /* SceneDelegate.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCanvasView.swift; sourceTree = "<group>"; };
 		5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archimedean_spiral.png; sourceTree = "<group>"; };
 		5B981E512B96D74000F1FA60 /* Creating Connections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Creating Connections.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B981E542B96D74000F1FA60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				5B981E542B96D74000F1FA60 /* AppDelegate.swift */,
 				5B981E562B96D74000F1FA60 /* SceneDelegate.swift */,
 				5B981E582B96D74000F1FA60 /* ViewController.swift */,
+				5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */,
 				5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */,
 				5B981E5A2B96D74000F1FA60 /* Main.storyboard */,
 				5B981E5D2B96D74100F1FA60 /* Assets.xcassets */,
@@ -265,6 +268,7 @@
 				5B981E592B96D74000F1FA60 /* ViewController.swift in Sources */,
 				5B981E552B96D74000F1FA60 /* AppDelegate.swift in Sources */,
 				5B981E572B96D74000F1FA60 /* SceneDelegate.swift in Sources */,
+				5B3C738A2BA02BE700B104EF /* CustomCanvasView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
