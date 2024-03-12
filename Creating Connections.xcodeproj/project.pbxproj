@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5B3C738A2BA02BE700B104EF /* CustomCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */; };
-		5B4B5BA82BA01BBC0051F939 /* archimedean_spiral.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */; };
 		5B981E552B96D74000F1FA60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E542B96D74000F1FA60 /* AppDelegate.swift */; };
 		5B981E572B96D74000F1FA60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E562B96D74000F1FA60 /* SceneDelegate.swift */; };
 		5B981E592B96D74000F1FA60 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E582B96D74000F1FA60 /* ViewController.swift */; };
@@ -18,6 +17,7 @@
 		5B981E6C2B96D74100F1FA60 /* Creating_ConnectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E6B2B96D74100F1FA60 /* Creating_ConnectionsTests.swift */; };
 		5B981E762B96D74100F1FA60 /* Creating_ConnectionsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E752B96D74100F1FA60 /* Creating_ConnectionsUITests.swift */; };
 		5B981E782B96D74100F1FA60 /* Creating_ConnectionsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B981E772B96D74100F1FA60 /* Creating_ConnectionsUITestsLaunchTests.swift */; };
+		5BC0F16C2BA0341800BEC3E4 /* archimedean_spiral.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC0F16B2BA0341800BEC3E4 /* archimedean_spiral.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +39,6 @@
 
 /* Begin PBXFileReference section */
 		5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCanvasView.swift; sourceTree = "<group>"; };
-		5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archimedean_spiral.png; sourceTree = "<group>"; };
 		5B981E512B96D74000F1FA60 /* Creating Connections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Creating Connections.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B981E542B96D74000F1FA60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B981E562B96D74000F1FA60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +52,7 @@
 		5B981E712B96D74100F1FA60 /* Creating ConnectionsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Creating ConnectionsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B981E752B96D74100F1FA60 /* Creating_ConnectionsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Creating_ConnectionsUITests.swift; sourceTree = "<group>"; };
 		5B981E772B96D74100F1FA60 /* Creating_ConnectionsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Creating_ConnectionsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5BC0F16B2BA0341800BEC3E4 /* archimedean_spiral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archimedean_spiral.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +106,8 @@
 				5B981E542B96D74000F1FA60 /* AppDelegate.swift */,
 				5B981E562B96D74000F1FA60 /* SceneDelegate.swift */,
 				5B981E582B96D74000F1FA60 /* ViewController.swift */,
+				5BC0F16B2BA0341800BEC3E4 /* archimedean_spiral.png */,
 				5B3C73892BA02BE700B104EF /* CustomCanvasView.swift */,
-				5B4B5BA72BA01BBC0051F939 /* archimedean_spiral.png */,
 				5B981E5A2B96D74000F1FA60 /* Main.storyboard */,
 				5B981E5D2B96D74100F1FA60 /* Assets.xcassets */,
 				5B981E5F2B96D74100F1FA60 /* LaunchScreen.storyboard */,
@@ -237,7 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B4B5BA82BA01BBC0051F939 /* archimedean_spiral.png in Resources */,
+				5BC0F16C2BA0341800BEC3E4 /* archimedean_spiral.png in Resources */,
 				5B981E612B96D74100F1FA60 /* LaunchScreen.storyboard in Resources */,
 				5B981E5E2B96D74100F1FA60 /* Assets.xcassets in Resources */,
 				5B981E5C2B96D74000F1FA60 /* Main.storyboard in Resources */,
