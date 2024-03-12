@@ -26,8 +26,15 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.addSubview(canvasView)
         view.addSubview(infoLabel)
+        
+        let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
+        view.addSubview(spiral)
+        spiral.translatesAutoresizingMaskIntoConstraints = false
+        spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         canvasView.delegate = self
     }
@@ -37,11 +44,20 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         canvasView.frame = view.bounds
         infoLabel.frame = CGRect(x: 0, y: 50, width: view.bounds.width, height: 50)
         infoLabel.text = "Creating Connections"
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            print("!\(touch.force)!")
+            infoLabel.text = "\(touch.force)"
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             print("*\(touch.force)*")
+            infoLabel.text = "\(touch.force)"
         }
     }
     
