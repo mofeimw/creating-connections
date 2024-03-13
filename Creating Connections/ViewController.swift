@@ -10,13 +10,19 @@ import PencilKit
 
 class ViewController: UIViewController, PKCanvasViewDelegate {
     
+    private let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
+    public var SPIRAL_TOP_LEFT = CGPoint(x: 0, y: 0)
+    public var SPIRAL_TOP_RIGHT = CGPoint(x: 0, y: 0)
+    public var SPIRAL_BOTTOM_LEFT = CGPoint(x: 0, y: 0)
+    public var SPIRAL_BOTTOM_RIGHT = CGPoint(x: 0, y: 0)
+    
     private lazy var canvasView: CustomCanvasView = {
         let canvas = CustomCanvasView()
         canvas.drawingPolicy = .anyInput
         return canvas
     }()
     
-    private let infoLabel: UILabel = {
+    public let infoLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
@@ -24,15 +30,31 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         return label
     }()
     
+    public let infoLabel1: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        return label
+    }()
+    
     public let infoLabel2: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 33, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
         return label
     }()
     
     public let infoLabel3: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        return label
+    }()
+    
+    public let infoLabel4: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
@@ -42,7 +64,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     
     private lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Clear Canvas", for: .normal)
+        button.setTitle("Clear", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 28, weight: .medium)
         button.addTarget(self, action: #selector(clearCanvas(_:)), for: .touchUpInside)
         return button
@@ -53,15 +75,16 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         
         view.addSubview(canvasView)
         view.addSubview(infoLabel)
+        view.addSubview(infoLabel1)
         view.addSubview(infoLabel2)
         view.addSubview(infoLabel3)
+        view.addSubview(infoLabel4)
         view.addSubview(clearButton)
-        
-        let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
         view.addSubview(spiral)
+        
         spiral.translatesAutoresizingMaskIntoConstraints = false
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50).isActive = true
         
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -79,47 +102,33 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        let spiralFrame = spiral.superview?.convert(spiral.frame, to: nil) ?? .zero
+        SPIRAL_TOP_LEFT = CGPoint(x: spiralFrame.minX, y: spiralFrame.minY)
+        SPIRAL_TOP_RIGHT = CGPoint(x: spiralFrame.maxX, y: spiralFrame.minY)
+        SPIRAL_BOTTOM_LEFT = CGPoint(x: spiralFrame.minX, y: spiralFrame.maxY)
+        SPIRAL_BOTTOM_RIGHT = CGPoint(x: spiralFrame.maxX, y: spiralFrame.maxY)
+        print("Spiral Location\n---------------")
+        print("Top Left: \(SPIRAL_TOP_LEFT)")
+        print("Top Right: \(SPIRAL_TOP_RIGHT)")
+        print("Bottom Left: \(SPIRAL_BOTTOM_LEFT)")
+        print("Bottom Right: \(SPIRAL_BOTTOM_RIGHT)\n")
+        
         canvasView.frame = view.bounds
         
         infoLabel.text = "Creating Connections"
-        infoLabel.frame = CGRect(x: 0, y: 60, width: view.bounds.width, height: 50)
+        infoLabel.frame = CGRect(x: 0, y: 40, width: view.bounds.width, height: 50)
         
-        infoLabel2.text = "Prototype v1.4"
+        infoLabel1.text = "Location:"
+        infoLabel1.frame = CGRect(x: 0, y: 80, width: view.bounds.width, height: 50)
+        
+        infoLabel2.text = "Pressure:"
         infoLabel2.frame = CGRect(x: 0, y: 120, width: view.bounds.width, height: 50)
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-        let currentDate = Date()
-        let dateString = dateFormatter.string(from: currentDate)
-        infoLabel3.frame = CGRect(x: 0, y: 180, width: view.bounds.width, height: 50)
-        infoLabel3.text = dateString
-    }
-    
-    func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-        let drawing = canvasView.drawing
-        let lastStroke = drawing.strokes.last
-        if (lastStroke == nil) {
-            return
-        }
-        let path = lastStroke!.path
-        
-        let start_coords = path.first!.location
-        let end_coords = path.last!.location
-        let info = "\(start_coords) -> \(end_coords)"
-        
-        infoLabel.text = info
-        
-        print("    --------------")
-        print("    \(start_coords)\n          ->\n    \(end_coords)")
-        print("    ==============")
-        for point in path {
-            print("   ", point.location)
-        }
-        print("~~~~~~~~~~~~~~~~~~~~~~\n\n")
+        infoLabel3.text = "Angle:"
+        infoLabel3.frame = CGRect(x: 0, y: 160, width: view.bounds.width, height: 50)
     }
     
     @objc func clearCanvas(_ sender: UIButton) {
         canvasView.drawing = PKDrawing()
-        infoLabel.text = "Canvas Cleared"
     }
 }
