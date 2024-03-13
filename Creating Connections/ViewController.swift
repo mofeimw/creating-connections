@@ -20,7 +20,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = label.font.withSize(40)
+        label.font = label.font.withSize(36)
         return label
     }()
     
@@ -28,7 +28,15 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = label.font.withSize(40)
+        label.font = label.font.withSize(36)
+        return label
+    }()
+    
+    public let infoLabel3: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .black
+        label.font = label.font.withSize(36)
         return label
     }()
 
@@ -38,6 +46,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         view.addSubview(canvasView)
         view.addSubview(infoLabel)
         view.addSubview(infoLabel2)
+        view.addSubview(infoLabel3)
         
         let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
         view.addSubview(spiral)
@@ -54,11 +63,18 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         
         canvasView.frame = view.bounds
         
-        infoLabel.frame = CGRect(x: 0, y: 50, width: view.bounds.width, height: 50)
         infoLabel.text = "Creating Connections"
+        infoLabel.frame = CGRect(x: 0, y: 60, width: view.bounds.width, height: 50)
         
-        infoLabel2.frame = CGRect(x: 0, y: 100, width: view.bounds.width, height: 50)
-        infoLabel2.text = "Prototype v1.3"
+        infoLabel2.text = "Prototype v1.4"
+        infoLabel2.frame = CGRect(x: 0, y: 120, width: view.bounds.width, height: 50)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        infoLabel3.frame = CGRect(x: 0, y: 180, width: view.bounds.width, height: 50)
+        infoLabel3.text = dateString
     }
     
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
@@ -72,12 +88,12 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         
         infoLabel.text = info
         
-        print("~~~~~~~~~~~~~~")
-        print(info)
-        print("==============")
+        print("    --------------")
+        print("    \(start_coords)\n          ->\n    \(end_coords)")
+        print("    ==============")
         for point in path {
-            print(point.location)
+            print("   ", point.location)
         }
-        print("--------------\n\n")
+        print("~~~~~~~~~~~~~~~~~~~~~~\n\n")
     }
 }
