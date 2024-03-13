@@ -39,6 +39,14 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         label.font = label.font.withSize(36)
         return label
     }()
+    
+    private lazy var clearButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Clear Canvas", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 28, weight: .medium)
+        button.addTarget(self, action: #selector(clearCanvas(_:)), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,12 +55,21 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         view.addSubview(infoLabel)
         view.addSubview(infoLabel2)
         view.addSubview(infoLabel3)
+        view.addSubview(clearButton)
         
         let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
         view.addSubview(spiral)
         spiral.translatesAutoresizingMaskIntoConstraints = false
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        clearButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            clearButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            clearButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            clearButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            clearButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
         
         canvasView.viewController = self
         canvasView.delegate = self
@@ -80,6 +97,9 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         let drawing = canvasView.drawing
         let lastStroke = drawing.strokes.last
+        if (lastStroke == nil) {
+            return
+        }
         let path = lastStroke!.path
         
         let start_coords = path.first!.location
@@ -95,5 +115,10 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
             print("   ", point.location)
         }
         print("~~~~~~~~~~~~~~~~~~~~~~\n\n")
+    }
+    
+    @objc func clearCanvas(_ sender: UIButton) {
+        canvasView.drawing = PKDrawing()
+        infoLabel.text = "Canvas Cleared"
     }
 }
