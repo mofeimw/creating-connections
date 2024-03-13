@@ -32,7 +32,7 @@ class CustomCanvasView: PKCanvasView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
+        super.touchesEnded(touches, with: event)
         for touch in touches {
             print("     ~\(touch.force) ~ \(touch.altitudeAngle * 180 / .pi)~")
             viewController?.infoLabel2.text = "Pressure: \(touch.force)"

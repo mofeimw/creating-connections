@@ -20,7 +20,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = label.font.withSize(36)
+        label.font = UIFont.systemFont(ofSize: 36, weight: .medium)
         return label
     }()
     
@@ -28,7 +28,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = label.font.withSize(36)
+        label.font = UIFont.systemFont(ofSize: 33, weight: .regular)
         return label
     }()
     
@@ -36,7 +36,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = label.font.withSize(36)
+        label.font = UIFont.systemFont(ofSize: 33, weight: .regular)
         return label
     }()
     
@@ -73,6 +73,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         
         canvasView.viewController = self
         canvasView.delegate = self
+        canvasView.tool = PKInkingTool(.pen, color: .black, width: 7)
     }
 
     override func viewDidLayoutSubviews() {
