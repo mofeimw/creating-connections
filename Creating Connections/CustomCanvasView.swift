@@ -23,17 +23,17 @@ class CustomCanvasView: PKCanvasView {
             
             // get other data from apple pencil
             let location = touch.location(in: self)
-            let force = touch.force/touch.maximumPossibleForce
-            let altAngle = touch.altitudeAngle * 180 / .pi
-            let aziAngle = touch.azimuthAngle(in: self) * 180 / .pi
+            let force = round(100 * touch.force/touch.maximumPossibleForce) / 100
+            let altAngle = round(100 * (touch.altitudeAngle * 180 / .pi)) / 100
+            let aziAngle = round(100 * (touch.azimuthAngle(in: self) * 180 / .pi)) / 100
             let timestamp = round(100 * touch.timestamp) / 100
             
             // log data to console
-            print("\(location) - \(formatDouble(closest)) - \(force) - \(altAngle), \(aziAngle) - \(formatDouble(timestamp))")
+            print("\(location) - \(formatDouble(closest)) - \(formatDouble(force)) - \(altAngle), \(aziAngle) - \(formatDouble(timestamp))")
             
             // update labels
-            viewController?.infoLabel1.text = "Location: \(touch.location(in: self))"
-            viewController?.infoLabel2.text = "Pressure: \(force * 100)%"
+            viewController?.infoLabel1.text = "Location: \(location)"
+            viewController?.infoLabel2.text = "Pressure: \(formatDouble(force * 100))%"
             viewController?.infoLabel3.text = "Angle: \(altAngle)°, \(aziAngle)°"
         }
     }
@@ -74,7 +74,7 @@ class CustomCanvasView: PKCanvasView {
             viewController?.infoLabel.text = "You're on the line!"
             closest = 0.00
         } else {
-            viewController?.infoLabel.text = "You're \(Int(closest)) away from the line"
+            viewController?.infoLabel.text = "You're \(Int(closest)) pixels away from the line"
         }
         
         return closest

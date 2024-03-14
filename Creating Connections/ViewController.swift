@@ -32,7 +32,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 36, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         return label
     }()
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
         return label
     }()
     
@@ -48,7 +48,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
         return label
     }()
     
@@ -56,15 +56,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 32, weight: .regular)
-        return label
-    }()
-    
-    public let infoLabel4: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 33, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
         return label
     }()
     
@@ -72,7 +64,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     private lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Clear", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 28, weight: .medium)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
         button.addTarget(self, action: #selector(clearCanvas(_:)), for: .touchUpInside)
         return button
     }()
@@ -90,14 +82,13 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         view.addSubview(infoLabel1)
         view.addSubview(infoLabel2)
         view.addSubview(infoLabel3)
-        view.addSubview(infoLabel4)
         view.addSubview(clearButton)
         view.addSubview(spiral)
         
         // center spiral but shift down 50 to account for info labels at top
         spiral.translatesAutoresizingMaskIntoConstraints = false
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50).isActive = true
+        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 55).isActive = true
         
         // position button at bottom
         clearButton.translatesAutoresizingMaskIntoConstraints = false
@@ -135,13 +126,13 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel.frame = CGRect(x: 0, y: 40, width: view.bounds.width, height: 50)
         
         infoLabel1.text = "Location:"
-        infoLabel1.frame = CGRect(x: 0, y: 85, width: view.bounds.width, height: 50)
+        infoLabel1.frame = CGRect(x: 0, y: 80, width: view.bounds.width, height: 50)
         
         infoLabel2.text = "Pressure:"
-        infoLabel2.frame = CGRect(x: 0, y: 130, width: view.bounds.width, height: 50)
+        infoLabel2.frame = CGRect(x: 0, y: 120, width: view.bounds.width, height: 50)
         
         infoLabel3.text = "Angle:"
-        infoLabel3.frame = CGRect(x: 0, y: 175, width: view.bounds.width, height: 50)
+        infoLabel3.frame = CGRect(x: 0, y: 160, width: view.bounds.width, height: 50)
     }
     
     // load spiral coordinate data from spiral.json
