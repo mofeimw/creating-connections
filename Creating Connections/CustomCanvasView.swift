@@ -21,13 +21,20 @@ class CustomCanvasView: PKCanvasView {
             // get distance to closest point in spiral
             let closest = pointMapper(point: touch.location(in: self))
             
-            // log data
-            print("\(touch.location(in: self)) - \(closest) - \(touch.force) - \(touch.altitudeAngle * 180 / .pi), \(touch.azimuthAngle(in: self) * 180 / .pi) - \(round(1000 * touch.timestamp) / 1000)")
+            // get other data from apple pencil
+            let location = touch.location(in: self)
+            let force = touch.force/touch.maximumPossibleForce
+            let altAngle = touch.altitudeAngle * 180 / .pi
+            let aziAngle = touch.azimuthAngle(in: self) * 180 / .pi
+            let timestamp = round(100 * touch.timestamp) / 100
+            
+            // log data to console
+            print("\(location) - \(formatDouble(closest)) - \(force) - \(altAngle), \(aziAngle) - \(formatDouble(timestamp))")
             
             // update labels
             viewController?.infoLabel1.text = "Location: \(touch.location(in: self))"
-            viewController?.infoLabel2.text = "Pressure: \(touch.force)/\(touch.maximumPossibleForce)"
-            viewController?.infoLabel3.text = "Angle: \(touch.altitudeAngle * 180 / .pi)°, \(touch.azimuthAngle(in: self) * 180 / .pi)°"
+            viewController?.infoLabel2.text = "Pressure: \(force * 100)%"
+            viewController?.infoLabel3.text = "Angle: \(altAngle)°, \(aziAngle)°"
         }
     }
     
@@ -67,7 +74,7 @@ class CustomCanvasView: PKCanvasView {
             viewController?.infoLabel.text = "You're on the line!"
             closest = 0.00
         } else {
-            viewController?.infoLabel.text = "You're \(closest) away from the line"
+            viewController?.infoLabel.text = "You're \(Int(closest)) away from the line"
         }
         
         return closest
@@ -81,6 +88,11 @@ class CustomCanvasView: PKCanvasView {
     // find distance between 2 points
     func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
         return sqrt(CGPointDistanceSquared(from: from, to: to))
+    }
+    
+    // format double for consistency
+    func formatDouble(_ number: Double) -> String {
+        return String(format: "%.2f", number)
     }
     
     // touch begin hook

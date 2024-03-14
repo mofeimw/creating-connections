@@ -135,13 +135,13 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel.frame = CGRect(x: 0, y: 40, width: view.bounds.width, height: 50)
         
         infoLabel1.text = "Location:"
-        infoLabel1.frame = CGRect(x: 0, y: 80, width: view.bounds.width, height: 50)
+        infoLabel1.frame = CGRect(x: 0, y: 85, width: view.bounds.width, height: 50)
         
         infoLabel2.text = "Pressure:"
-        infoLabel2.frame = CGRect(x: 0, y: 120, width: view.bounds.width, height: 50)
+        infoLabel2.frame = CGRect(x: 0, y: 130, width: view.bounds.width, height: 50)
         
         infoLabel3.text = "Angle:"
-        infoLabel3.frame = CGRect(x: 0, y: 160, width: view.bounds.width, height: 50)
+        infoLabel3.frame = CGRect(x: 0, y: 175, width: view.bounds.width, height: 50)
     }
     
     // load spiral coordinate data from spiral.json
