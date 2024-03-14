@@ -11,10 +11,12 @@ import PencilKit
 class ViewController: UIViewController, PKCanvasViewDelegate {
     
     private let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
-    public var SPIRAL_TOP_LEFT = CGPoint(x: 0, y: 0)
-    public var SPIRAL_TOP_RIGHT = CGPoint(x: 0, y: 0)
-    public var SPIRAL_BOTTOM_LEFT = CGPoint(x: 0, y: 0)
-    public var SPIRAL_BOTTOM_RIGHT = CGPoint(x: 0, y: 0)
+    public var SPIRAL_COORDS : [[Double]] = []
+    public var SPIRAL_ORIGIN = CGPoint(x: 0, y: 0)
+    
+    private struct Coordinates: Decodable {
+        let coords: [[Double]]
+    }
     
     private lazy var canvasView: CustomCanvasView = {
         let canvas = CustomCanvasView()
@@ -73,6 +75,8 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadSpiralCoords()
+        
         view.addSubview(canvasView)
         view.addSubview(infoLabel)
         view.addSubview(infoLabel1)
@@ -103,15 +107,12 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         super.viewDidLayoutSubviews()
         
         let spiralFrame = spiral.superview?.convert(spiral.frame, to: nil) ?? .zero
-        SPIRAL_TOP_LEFT = CGPoint(x: spiralFrame.minX, y: spiralFrame.minY)
-        SPIRAL_TOP_RIGHT = CGPoint(x: spiralFrame.maxX, y: spiralFrame.minY)
-        SPIRAL_BOTTOM_LEFT = CGPoint(x: spiralFrame.minX, y: spiralFrame.maxY)
-        SPIRAL_BOTTOM_RIGHT = CGPoint(x: spiralFrame.maxX, y: spiralFrame.maxY)
+        SPIRAL_ORIGIN = CGPoint(x: spiralFrame.minX, y: spiralFrame.minY)
         print("Spiral Location\n---------------")
-        print("Top Left: \(SPIRAL_TOP_LEFT)")
-        print("Top Right: \(SPIRAL_TOP_RIGHT)")
-        print("Bottom Left: \(SPIRAL_BOTTOM_LEFT)")
-        print("Bottom Right: \(SPIRAL_BOTTOM_RIGHT)\n")
+        print("Top Left: \(SPIRAL_ORIGIN)")
+        print("Top Right: \(CGPoint(x: spiralFrame.maxX, y: spiralFrame.minY))")
+        print("Bottom Left: \(CGPoint(x: spiralFrame.minX, y: spiralFrame.maxY))")
+        print("Bottom Right: \(CGPoint(x: spiralFrame.maxX, y: spiralFrame.maxY))\n")
         
         canvasView.frame = view.bounds
         
@@ -128,7 +129,52 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel3.frame = CGRect(x: 0, y: 160, width: view.bounds.width, height: 50)
     }
     
+    func loadSpiralCoords() {
+        do {
+            if let filePath = Bundle.main.path(forResource: "spiral", ofType: "json") {
+                let fileUrl = URL(fileURLWithPath: filePath)
+                let data = try Data(contentsOf: fileUrl)
+                let decoder = JSONDecoder()
+                let jsonData = try decoder.decode(Coordinates.self, from: data)
+                SPIRAL_COORDS = jsonData.coords
+            }
+        } catch {
+            print("error: \(error)")
+        }
+    }
+    
+    func drawSpiralCoords() {
+        for coord in SPIRAL_COORDS {
+            let x = SPIRAL_ORIGIN.x + CGFloat(coord[0])
+            let y = SPIRAL_ORIGIN.y + CGFloat(coord[1])
+                
+            let dotView = UIView(frame: CGRect(x: x, y: y, width: 2, height: 2))
+            dotView.backgroundColor = .black
+                
+            view.addSubview(dotView)
+        }
+    }
+    
+    func moveSpiralCoords(x : Double, y : Double) {
+        for (i, _) in SPIRAL_COORDS.enumerated() {
+            SPIRAL_COORDS[i][0] += x;
+            SPIRAL_COORDS[i][1] += y;
+        }
+    }
+    
+    func resizeSpiralCoords(factor : Double) {
+        for (i, _) in SPIRAL_COORDS.enumerated() {
+            SPIRAL_COORDS[i][0] *= factor;
+            SPIRAL_COORDS[i][1] *= factor;
+        }
+    }
+    
     @objc func clearCanvas(_ sender: UIButton) {
         canvasView.drawing = PKDrawing()
+        
+        infoLabel.text = "Creating Connections"
+        infoLabel1.text = "Location:"
+        infoLabel2.text = "Pressure:"
+        infoLabel3.text = "Angle:"
     }
 }

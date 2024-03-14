@@ -16,33 +16,58 @@ class CustomCanvasView: PKCanvasView {
     
     func processTouch(touches: Set<UITouch>) {
         for touch in touches {
-            print("\(touch.location(in: self)) - \(touch.force) - \(touch.altitudeAngle * 180 / .pi), \(touch.azimuthAngle(in: self) * 180 / .pi) - \(touch.timestamp)")
+            let closest = pointMapper(point: touch.location(in: self))
+            
+            print("\(touch.location(in: self)) - \(closest) - \(touch.force) - \(touch.altitudeAngle * 180 / .pi), \(touch.azimuthAngle(in: self) * 180 / .pi) - \(round(1000 * touch.timestamp) / 1000)")
             
             viewController?.infoLabel1.text = "Location: \(touch.location(in: self))"
             viewController?.infoLabel2.text = "Pressure: \(touch.force)"
             viewController?.infoLabel3.text = "Angle: \(touch.altitudeAngle * 180 / .pi)°, \(touch.azimuthAngle(in: self) * 180 / .pi)°"
-            
-            pointMapper(point: touch.location(in: self))
         }
     }
     
-    func pointMapper(point : CGPoint) {
-        let spiral_origin = viewController?.SPIRAL_TOP_LEFT
+    func pointMapper(point : CGPoint) -> Double {
+        let SPIRAL_ORIGIN = viewController?.SPIRAL_ORIGIN
+        let SPIRAL_COORDS = viewController!.SPIRAL_COORDS
         
-        let origin = CGPoint(x: spiral_origin!.x + 273.7, y: spiral_origin!.y + 248.4)
-        let last = CGPoint(x: spiral_origin!.x + 592.9, y: spiral_origin!.y + 248.4)
+        var closeFlag = false
+        var closest = 1000000000000000.0
         
-        if (closeEnough(p1: origin.x, p2: point.x) && closeEnough(p1: origin.y, p2: point.y)) {
-            viewController?.infoLabel.text = "You're at the startpoint"
-        } else if (closeEnough(p1: last.x, p2: point.x) && closeEnough(p1: last.y, p2: point.y)) {
-            viewController?.infoLabel.text = "You're at the endpoint"
-        } else {
-            viewController?.infoLabel.text = "Creating Connections"
+        for coord in SPIRAL_COORDS {
+            let spiral_point = CGPoint(x: SPIRAL_ORIGIN!.x + coord.first!, y: SPIRAL_ORIGIN!.y + coord.last!)
+            let distance = CGPointDistance(from: point, to: spiral_point)
+            
+            if (distance < closest) {
+                closest = distance
+            }
+            
+            if (distance < 8.0) {
+                closeFlag = true
+            }
         }
+        
+        closest = Double(round(100 * (closest - 8.0)) / 100)
+        
+        if (closeFlag) {
+            viewController?.infoLabel.text = "You're on the line!"
+            closest = 0.00
+        } else {
+            viewController?.infoLabel.text = "You're \(closest) away from the line"
+        }
+        
+        return closest
     }
     
     func closeEnough(p1: CGFloat, p2: CGFloat) -> Bool {
         return abs(p1 - p2) <= 10
+    }
+    
+    func CGPointDistanceSquared(from: CGPoint, to: CGPoint) -> CGFloat {
+        return (from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)
+    }
+
+    func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
+        return sqrt(CGPointDistanceSquared(from: from, to: to))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -50,7 +75,7 @@ class CustomCanvasView: PKCanvasView {
         
         print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~")
         print("------- Max Possible Force: \(touches.first!.maximumPossibleForce) -------")
-        print("- coords, pressure, angles, timestamp -")
+        print("- coords, distance, pressure, angles, timestamp-")
         processTouch(touches: touches)
         
     }
