@@ -10,20 +10,24 @@ import PencilKit
 
 class ViewController: UIViewController, PKCanvasViewDelegate {
     
+    // init spiral info
     private let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
     public var SPIRAL_COORDS : [[Double]] = []
     public var SPIRAL_ORIGIN = CGPoint(x: 0, y: 0)
     
+    // struct to deserialize json
     private struct Coordinates: Decodable {
         let coords: [[Double]]
     }
     
+    // custom canvas view to cooperate with touch hooks
     private lazy var canvasView: CustomCanvasView = {
         let canvas = CustomCanvasView()
         canvas.drawingPolicy = .anyInput
         return canvas
     }()
     
+    // info labels
     public let infoLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -64,6 +68,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         return label
     }()
     
+    // clear button
     private lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Clear", for: .normal)
@@ -72,11 +77,14 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         return button
     }()
 
+    // called after the controller's view is loaded into memory
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // load spiral coordinates
         loadSpiralCoords()
         
+        // add content to view
         view.addSubview(canvasView)
         view.addSubview(infoLabel)
         view.addSubview(infoLabel1)
@@ -86,10 +94,12 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         view.addSubview(clearButton)
         view.addSubview(spiral)
         
+        // center spiral but shift down 50 to account for info labels at top
         spiral.translatesAutoresizingMaskIntoConstraints = false
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50).isActive = true
         
+        // position button at bottom
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             clearButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
@@ -98,14 +108,17 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
             clearButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         
+        // settings for canvas
         canvasView.viewController = self
         canvasView.delegate = self
         canvasView.tool = PKInkingTool(.pen, color: .black, width: 7)
     }
 
+    // called when bounds change for view (such as orientation flip)
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        // get coordinate location of spiral on the screen
         let spiralFrame = spiral.superview?.convert(spiral.frame, to: nil) ?? .zero
         SPIRAL_ORIGIN = CGPoint(x: spiralFrame.minX, y: spiralFrame.minY)
         print("Spiral Location\n---------------")
@@ -114,8 +127,10 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         print("Bottom Left: \(CGPoint(x: spiralFrame.minX, y: spiralFrame.maxY))")
         print("Bottom Right: \(CGPoint(x: spiralFrame.maxX, y: spiralFrame.maxY))\n")
         
+        // set the canvas frame bounds
         canvasView.frame = view.bounds
         
+        // set the label text and positions
         infoLabel.text = "Creating Connections"
         infoLabel.frame = CGRect(x: 0, y: 40, width: view.bounds.width, height: 50)
         
@@ -129,6 +144,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel3.frame = CGRect(x: 0, y: 160, width: view.bounds.width, height: 50)
     }
     
+    // load spiral coordinate data from spiral.json
     func loadSpiralCoords() {
         do {
             if let filePath = Bundle.main.path(forResource: "spiral", ofType: "json") {
@@ -143,6 +159,8 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
     
+    // debug function to draw out spiral coordinates
+    // ensure a perfect match to png image
     func drawSpiralCoords() {
         for coord in SPIRAL_COORDS {
             let x = SPIRAL_ORIGIN.x + CGFloat(coord[0])
@@ -155,6 +173,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
     
+    // move all points in spiral coordinate by (x, y)
     func moveSpiralCoords(x : Double, y : Double) {
         for (i, _) in SPIRAL_COORDS.enumerated() {
             SPIRAL_COORDS[i][0] += x;
@@ -162,6 +181,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
     
+    // scale spiral coordinates by factor
     func resizeSpiralCoords(factor : Double) {
         for (i, _) in SPIRAL_COORDS.enumerated() {
             SPIRAL_COORDS[i][0] *= factor;
@@ -169,6 +189,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
     
+    // clear canvas and reset labels
     @objc func clearCanvas(_ sender: UIButton) {
         canvasView.drawing = PKDrawing()
         

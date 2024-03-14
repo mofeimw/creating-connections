@@ -12,42 +12,57 @@ class CustomCanvasView: PKCanvasView {
     
     weak var viewController: ViewController?
     
+    // stroke counter
     private var i = 1
     
+    // process each touch
     func processTouch(touches: Set<UITouch>) {
         for touch in touches {
+            // get distance to closest point in spiral
             let closest = pointMapper(point: touch.location(in: self))
             
+            // log data
             print("\(touch.location(in: self)) - \(closest) - \(touch.force) - \(touch.altitudeAngle * 180 / .pi), \(touch.azimuthAngle(in: self) * 180 / .pi) - \(round(1000 * touch.timestamp) / 1000)")
             
+            // update labels
             viewController?.infoLabel1.text = "Location: \(touch.location(in: self))"
-            viewController?.infoLabel2.text = "Pressure: \(touch.force)"
+            viewController?.infoLabel2.text = "Pressure: \(touch.force)/\(touch.maximumPossibleForce)"
             viewController?.infoLabel3.text = "Angle: \(touch.altitudeAngle * 180 / .pi)°, \(touch.azimuthAngle(in: self) * 180 / .pi)°"
         }
     }
     
+    // find closest point to spiral
     func pointMapper(point : CGPoint) -> Double {
+        // get spiral location data
         let SPIRAL_ORIGIN = viewController?.SPIRAL_ORIGIN
         let SPIRAL_COORDS = viewController!.SPIRAL_COORDS
         
+        // set default values
         var closeFlag = false
         var closest = 1000000000000000.0
         
+        // loop over every point in the spiral
         for coord in SPIRAL_COORDS {
+            // make a point using coordinates
             let spiral_point = CGPoint(x: SPIRAL_ORIGIN!.x + coord.first!, y: SPIRAL_ORIGIN!.y + coord.last!)
+            // find distance between points
             let distance = CGPointDistance(from: point, to: spiral_point)
             
+            // update tracker if closer
             if (distance < closest) {
                 closest = distance
             }
             
+            // check if touch is within spiral line (due to line thickness)
             if (distance < 8.0) {
                 closeFlag = true
             }
         }
         
+        // round and subtract line thickness
         closest = Double(round(100 * (closest - 8.0)) / 100)
         
+        // update label
         if (closeFlag) {
             viewController?.infoLabel.text = "You're on the line!"
             closest = 0.00
@@ -58,37 +73,40 @@ class CustomCanvasView: PKCanvasView {
         return closest
     }
     
-    func closeEnough(p1: CGFloat, p2: CGFloat) -> Bool {
-        return abs(p1 - p2) <= 10
-    }
-    
+    // find distance between 2 points (squared)
     func CGPointDistanceSquared(from: CGPoint, to: CGPoint) -> CGFloat {
         return (from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)
     }
 
+    // find distance between 2 points
     func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
         return sqrt(CGPointDistanceSquared(from: from, to: to))
     }
     
+    // touch begin hook
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
+        // log info and process touch
         print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~")
         print("------- Max Possible Force: \(touches.first!.maximumPossibleForce) -------")
-        print("- coords, distance, pressure, angles, timestamp-")
+        print("- coords, distance, pressure, angles, timestamp -")
         processTouch(touches: touches)
         
     }
 
+    // touch move hook
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         
         processTouch(touches: touches)
     }
     
+    // touch end hook
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
+        // process info, close log section and increment counter
         processTouch(touches: touches)
         print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~\n")
         i += 1
