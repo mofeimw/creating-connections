@@ -122,5 +122,11 @@ class CustomCanvasView: PKCanvasView {
         processTouch(touches: touches)
         print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~\n")
         i += 1
+        
+        // clear labels
+        viewController?.infoLabel.text = "Creating Connections"
+        viewController?.infoLabel1.text = "Location:"
+        viewController?.infoLabel2.text = "Pressure:"
+        viewController?.infoLabel3.text = "Angle:"
     }
 }
