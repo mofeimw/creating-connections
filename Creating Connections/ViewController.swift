@@ -64,20 +64,11 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         return label
     }()
     
-    // clear button
-    private lazy var clearButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Clear", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
-        button.addTarget(self, action: #selector(clearCanvas(_:)), for: .touchUpInside)
-        return button
-    }()
-    
     // done button
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Done", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .medium)
         button.addTarget(self, action: #selector(done(_:)), for: .touchUpInside)
         return button
     }()
@@ -104,7 +95,6 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         //view.addSubview(infoLabel1)
         //view.addSubview(infoLabel2)
         //view.addSubview(infoLabel3)
-        view.addSubview(clearButton)
         view.addSubview(doneButton)
         view.addSubview(debugButton)
         view.addSubview(spiral)
@@ -114,23 +104,17 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
         
-        // position buttons at bottom
-        clearButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            clearButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            clearButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
-            clearButton.heightAnchor.constraint(equalToConstant: 44)
-        ])
+        // position button at bottom
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            doneButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+            doneButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            doneButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             doneButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         debugButton.translatesAutoresizingMaskIntoConstraints = false
         
         // button colors
-        clearButton.setTitleColor(.black, for: .normal)
         doneButton.setTitleColor(.black, for: .normal)
         debugButton.setTitleColor(.white, for: .normal) // hide
         
