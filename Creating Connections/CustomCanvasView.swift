@@ -9,11 +9,8 @@ import UIKit
 import PencilKit
 
 class CustomCanvasView: PKCanvasView {
-    
+    // load view controller
     weak var viewController: ViewController?
-    
-    // stroke counter
-    private var i = 1
     
     // process each touch
     func processTouch(touches: Set<UITouch>) {
@@ -29,7 +26,10 @@ class CustomCanvasView: PKCanvasView {
             let timestamp = round(100 * touch.timestamp) / 100
             
             // log data to console
-            print("\(location) - \(formatDouble(closest)) - \(formatDouble(force)) - \(altAngle), \(aziAngle) - \(formatDouble(timestamp))")
+            let log_line = "\(location), \(formatDouble(closest)), \(formatDouble(force)), (\(altAngle),\(aziAngle)), \(formatDouble(timestamp))"
+            print(log_line)
+            // update log as well
+            viewController?.log += log_line + "\n"
             
             // update labels
             viewController?.infoLabel1.text = "Location: \(location)"
@@ -100,7 +100,7 @@ class CustomCanvasView: PKCanvasView {
         super.touchesBegan(touches, with: event)
         
         // log info and process touch
-        print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~ \(viewController!.i) ~~~~~~~~~~~~~~~~~~~")
         print("------- Max Possible Force: \(touches.first!.maximumPossibleForce) -------")
         print("- coords, distance, pressure, angles, timestamp -")
         processTouch(touches: touches)
@@ -118,10 +118,13 @@ class CustomCanvasView: PKCanvasView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-        // process info, close log section and increment counter
+        // process info, close log section
         processTouch(touches: touches)
-        print("~~~~~~~~~~~~~~~~~ \(i) ~~~~~~~~~~~~~~~~~~~\n")
-        i += 1
+        print("~~~~~~~~~~~~~~~~~ \(viewController!.i) ~~~~~~~~~~~~~~~~~~~\n")
+        
+        // update log and increment counter
+        viewController?.log += "~\(viewController!.i)\n"
+        viewController!.i += 1
         
         // clear labels
         viewController?.infoLabel.text = "Creating Connections"

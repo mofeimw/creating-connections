@@ -9,6 +9,10 @@ import UIKit
 import PencilKit
 
 class ViewController: UIViewController, PKCanvasViewDelegate {
+    // app variables
+    public var log = ""
+    public var i = 1
+    private var debug = false
     
     // init spiral info
     private let spiral = UIImageView(image: UIImage(named: "archimedean_spiral.png"))
@@ -32,7 +36,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 23, weight: .medium)
         return label
     }()
     
@@ -40,7 +44,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 23, weight: .regular)
         return label
     }()
     
@@ -48,7 +52,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 23, weight: .regular)
         return label
     }()
     
@@ -56,7 +60,7 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 27, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 23, weight: .regular)
         return label
     }()
     
@@ -64,8 +68,26 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
     private lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Clear", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 27, weight: .medium)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
         button.addTarget(self, action: #selector(clearCanvas(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    // done button
+    private lazy var doneButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Done", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        button.addTarget(self, action: #selector(done(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    // debug button
+    private lazy var debugButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("D", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 66, weight: .medium)
+        button.addTarget(self, action: #selector(toggleDebug(_:)), for: .touchUpInside)
         return button
     }()
 
@@ -78,26 +100,39 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         
         // add content to view
         view.addSubview(canvasView)
-        view.addSubview(infoLabel)
-        view.addSubview(infoLabel1)
-        view.addSubview(infoLabel2)
-        view.addSubview(infoLabel3)
+        //view.addSubview(infoLabel)
+        //view.addSubview(infoLabel1)
+        //view.addSubview(infoLabel2)
+        //view.addSubview(infoLabel3)
         view.addSubview(clearButton)
+        view.addSubview(doneButton)
+        view.addSubview(debugButton)
         view.addSubview(spiral)
         
-        // center spiral but shift down 50 to account for info labels at top
+        // center spiral but shift down to account for info labels at top
         spiral.translatesAutoresizingMaskIntoConstraints = false
         spiral.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 55).isActive = true
+        spiral.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
         
-        // position button at bottom
+        // position buttons at bottom
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             clearButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            clearButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            clearButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            clearButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
             clearButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            doneButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+            doneButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        debugButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // button colors
+        clearButton.setTitleColor(.black, for: .normal)
+        doneButton.setTitleColor(.black, for: .normal)
+        debugButton.setTitleColor(.white, for: .normal) // hide
         
         // settings for canvas
         canvasView.viewController = self
@@ -188,5 +223,30 @@ class ViewController: UIViewController, PKCanvasViewDelegate {
         infoLabel1.text = "Location:"
         infoLabel2.text = "Pressure:"
         infoLabel3.text = "Angle:"
+    }
+    
+    // done - copy to clipboard
+    @objc func done(_ sender: UIButton) {
+        UIPasteboard.general.string = log
+        log = ""
+        i = 1
+        clearCanvas(doneButton)
+    }
+    
+    // toggle debug stats
+    @objc func toggleDebug(_ sender: UIButton) {
+        if (debug) {
+            infoLabel.removeFromSuperview();
+            infoLabel1.removeFromSuperview();
+            infoLabel2.removeFromSuperview();
+            infoLabel3.removeFromSuperview();
+            debug = false
+        } else {
+            view.addSubview(infoLabel)
+            view.addSubview(infoLabel1)
+            view.addSubview(infoLabel2)
+            view.addSubview(infoLabel3)
+            debug = true
+        }
     }
 }
